@@ -1,0 +1,451 @@
+{
+  "info": {
+    "_postman_id": "b18f430b-94d7-4b52-97ea-8d02e08e6f30",
+    "name": "Healthcare QMS - Dynamic Survey Management API",
+    "description": "Comprehensive Postman Collection covering all Authentication, Admin Management, Public Survey, and Analytics endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "surveyId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "surveyToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "linkId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.accessToken) {",
+                  "    pm.collectionVariables.set('authToken', jsonData.accessToken);",
+                  "    console.log('Auth token stored in collection variable');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin@123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Get Current Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Admin Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Survey Management",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/dashboard/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "dashboard", "stats"]
+            }
+          }
+        },
+        {
+          "name": "List All Surveys",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys"]
+            }
+          }
+        },
+        {
+          "name": "Create Survey Template",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set('surveyId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Emergency Room Quality Audit\",\n  \"description\": \"Feedback on triage wait times and physician communication in ER\",\n  \"category\": \"EMERGENCY_ER\",\n  \"questions\": [\n    {\n      \"id\": \"q1\",\n      \"text\": \"How quickly was your triage assessment completed?\",\n      \"type\": \"rating\",\n      \"min\": 1,\n      \"max\": 5,\n      \"required\": true\n    },\n    {\n      \"id\": \"q2\",\n      \"text\": \"Did the attending physician clearly answer your questions?\",\n      \"type\": \"yes_no\",\n      \"required\": true\n    },\n    {\n      \"id\": \"q3\",\n      \"text\": \"Additional notes for the emergency clinical team:\",\n      \"type\": \"long_text\",\n      \"required\": false\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys"]
+            }
+          }
+        },
+        {
+          "name": "Import Survey Template (JSON)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template\": {\n    \"name\": \"Hospital Patient Satisfaction Survey\",\n    \"description\": \"Patient experience feedback\",\n    \"category\": \"PATIENT_CARE\",\n    \"questions\": [\n      {\n        \"id\": \"q1\",\n        \"text\": \"How satisfied are you with the waiting time before your consultation?\",\n        \"type\": \"rating\",\n        \"min\": 1,\n        \"max\": 5,\n        \"required\": true\n      },\n      {\n        \"id\": \"q2\",\n        \"text\": \"Did the doctor explain your medical condition and treatment clearly?\",\n        \"type\": \"single_choice\",\n        \"options\": [\"Yes\", \"No\", \"Partially\"],\n        \"required\": true\n      },\n      {\n        \"id\": \"q3\",\n        \"text\": \"How would you rate the cleanliness of the hospital and patient rooms?\",\n        \"type\": \"rating\",\n        \"min\": 1,\n        \"max\": 5,\n        \"required\": true\n      }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/import",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "import"]
+            }
+          }
+        },
+        {
+          "name": "Get Survey By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Survey & Generate Public Link",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.publicToken) {",
+                  "    pm.collectionVariables.set('surveyToken', jsonData.publicToken);",
+                  "}",
+                  "if (jsonData.linkId) {",
+                  "    pm.collectionVariables.set('linkId', jsonData.linkId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maxResponses\": 500\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Regenerate Public Survey Link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"forceNewLink\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}/regenerate-link",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}", "regenerate-link"]
+            }
+          }
+        },
+        {
+          "name": "Get Links For Survey",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}/links",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}", "links"]
+            }
+          }
+        },
+        {
+          "name": "Deactivate Survey Link",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/survey-links/{{linkId}}/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "survey-links", "{{linkId}}", "deactivate"]
+            }
+          }
+        },
+        {
+          "name": "Get Survey Responses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}/responses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}", "responses"]
+            }
+          }
+        },
+        {
+          "name": "Get Survey Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}/analytics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}", "analytics"]
+            }
+          }
+        },
+        {
+          "name": "Export Survey Responses to CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/surveys/{{surveyId}}/export",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "surveys", "{{surveyId}}", "export"]
+            }
+          }
+        },
+        {
+          "name": "Get Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/audit-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "audit-logs"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public Survey (No Auth Required)",
+      "item": [
+        {
+          "name": "Get Published Survey By Public Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/public/surveys/{{surveyToken}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "public", "surveys", "{{surveyToken}}"]
+            }
+          }
+        },
+        {
+          "name": "Submit Survey Response",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"respondent\": {\n    \"name\": \"Arun Kumar\",\n    \"mobileNumber\": \"9876543210\",\n    \"emailAddress\": \"arun@example.com\",\n    \"overallRating\": 4,\n    \"overallComments\": \"Good hospital services and compassionate clinical staff.\"\n  },\n  \"answers\": [\n    {\n      \"questionId\": \"q1\",\n      \"value\": 4\n    },\n    {\n      \"questionId\": \"q2\",\n      \"value\": \"Yes\"\n    },\n    {\n      \"questionId\": \"q3\",\n      \"value\": 5\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/public/surveys/{{surveyToken}}/responses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "public", "surveys", "{{surveyToken}}", "responses"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

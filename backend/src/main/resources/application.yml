@@ -1,0 +1,52 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: healthcare-survey-service
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:healthcare_survey;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.h2.Driver}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+# Security & App Properties
+app:
+  jwt:
+    secret: ${JWT_SECRET:4c65637572652d6865616c7468636172652d7375727665792d6a77742d7365637265742d6b65792d3235362d626974732121}
+    access-token-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000} # 15 minutes
+    refresh-token-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000} # 7 days
+    cookie-name: refreshToken
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+  public-survey:
+    base-url: ${PUBLIC_SURVEY_BASE_URL:http://localhost:5173/survey}
+
+# OpenAPI Swagger documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+
+logging:
+  level:
+    root: INFO
+    com.healthcare.survey: INFO
+    org.springframework.security: WARN

@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+
+app:
+  jwt:
+    secret: 4c65637572652d6865616c7468636172652d7375727665792d6a77742d7365637265742d6b65792d3235362d626974732121
+    access-token-expiration-ms: 60000
+    refresh-token-expiration-ms: 3600000
+    cookie-name: refreshToken
+  cors:
+    allowed-origins: http://localhost:5173
+  public-survey:
+    base-url: http://localhost:5173/survey

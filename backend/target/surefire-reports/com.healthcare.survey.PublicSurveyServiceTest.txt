@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.healthcare.survey.PublicSurveyServiceTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.585 s -- in com.healthcare.survey.PublicSurveyServiceTest

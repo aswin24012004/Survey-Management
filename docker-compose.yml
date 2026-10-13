@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: healthcare-qms-postgres
+    environment:
+      POSTGRES_DB: healthcare_survey
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: healthcare-qms-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      PORT: 8080
+      DB_URL: jdbc:postgresql://postgres:5432/healthcare_survey
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgrespassword
+      JWT_SECRET: 4c65637572652d6865616c7468636172652d7375727665792d6a77742d7365637265742d6b65792d3235362d626974732121
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://localhost:3000
+      PUBLIC_SURVEY_BASE_URL: http://localhost:5173/survey
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

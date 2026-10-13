@@ -1,0 +1,64 @@
+{
+  "template": {
+    "name": "Hospital Patient Satisfaction Survey",
+    "description": "Patient experience feedback to improve hospital outpatient and inpatient care quality.",
+    "category": "PATIENT_CARE",
+    "questions": [
+      {
+        "id": "q1",
+        "text": "How satisfied are you with the waiting time before your consultation?",
+        "type": "rating",
+        "min": 1,
+        "max": 5,
+        "required": true,
+        "helpText": "1 = Very Dissatisfied, 5 = Very Satisfied"
+      },
+      {
+        "id": "q2",
+        "text": "Did the doctor explain your medical condition and treatment clearly?",
+        "type": "single_choice",
+        "options": [
+          "Yes",
+          "No",
+          "Partially"
+        ],
+        "required": true
+      },
+      {
+        "id": "q3",
+        "text": "How would you rate the cleanliness of the hospital and patient rooms?",
+        "type": "rating",
+        "min": 1,
+        "max": 5,
+        "required": true
+      },
+      {
+        "id": "q4",
+        "text": "Did the nursing staff treat you with courtesy, compassion, and respect?",
+        "type": "yes_no",
+        "required": true
+      },
+      {
+        "id": "q5",
+        "text": "Which hospital department or facility did you visit today?",
+        "type": "dropdown",
+        "options": [
+          "Outpatient Clinic (OPD)",
+          "Emergency Room (ER)",
+          "Cardiology",
+          "Pediatrics",
+          "Radiology / Lab",
+          "Inpatient Ward"
+        ],
+        "required": false
+      },
+      {
+        "id": "q6",
+        "text": "Please provide any additional comments or suggestions for improving our care.",
+        "type": "long_text",
+        "placeholder": "Your valuable feedback helps us serve you better...",
+        "required": false
+      }
+    ]
+  }
+}
