@@ -1,4 +1,5 @@
 com\healthcare\survey\NeonConnectionTest.class
+com\healthcare\survey\DataInitializerTest.class
 com\healthcare\survey\NeonEndToEndIntegrationTest.class
 com\healthcare\survey\SecurityAndControllerTest.class
 com\healthcare\survey\SurveyTemplateServiceTest.class

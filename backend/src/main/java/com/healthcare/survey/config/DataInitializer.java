@@ -6,6 +6,7 @@ import com.healthcare.survey.repository.SurveyTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,9 @@ public class DataInitializer {
     private final AppUserRepository userRepository;
     private final SurveyTemplateRepository templateRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${app.admin.initial-password:Admin@123456}")
+    private String initialPassword;
 
     public DataInitializer(AppUserRepository userRepository,
                            SurveyTemplateRepository templateRepository,
@@ -37,9 +41,11 @@ public class DataInitializer {
 
     private AppUser initAdminUser() {
         return userRepository.findByUsername("admin").map(existing -> {
-            if (!passwordEncoder.matches("Admin@123456", existing.getPasswordHash())) {
-                log.info("Synchronizing administrator password hash for: admin");
-                existing.setPasswordHash(passwordEncoder.encode("Admin@123456"));
+            boolean seededHash = "$2a$10$P2NrkJqT9g1bZc00j9V31eQvHjXQ7Z03t3jE3wN1XoE0jN8m4QkXe".equals(existing.getPasswordHash());
+            boolean defaultPassword = passwordEncoder.matches("Admin@123456", existing.getPasswordHash());
+            if (seededHash || (defaultPassword && !"Admin@123456".equals(initialPassword))) {
+                log.info("Replacing seeded administrator password");
+                existing.setPasswordHash(passwordEncoder.encode(initialPassword));
                 return userRepository.save(existing);
             }
             return existing;
@@ -48,7 +54,7 @@ public class DataInitializer {
             AppUser admin = new AppUser(
                     "admin",
                     "admin@qms.healthcare",
-                    passwordEncoder.encode("Admin@123456"),
+                    passwordEncoder.encode(initialPassword),
                     "ROLE_ADMIN"
             );
             return userRepository.save(admin);

@@ -14,11 +14,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class SecurityAndControllerTest {
+
+    @Test
+    void frontendDeepLinkIsPublicButAdminApiRemainsProtected() throws Exception {
+        mockMvc.perform(get("/admin/surveys/1/responses"))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/index.html"));
+        mockMvc.perform(get("/api/admin/surveys"))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/healthz"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
 
     @Autowired
     private MockMvc mockMvc;

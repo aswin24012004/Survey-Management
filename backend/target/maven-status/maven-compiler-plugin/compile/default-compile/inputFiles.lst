@@ -4,6 +4,7 @@ D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\config
 D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\controller\AdminSurveyController.java
 D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\controller\AuthController.java
 D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\controller\PublicSurveyController.java
+D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\controller\WebAppController.java
 D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\dto\AuditLogDto.java
 D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\dto\AuthResponse.java
 D:\Healthcare projects\Survey\backend\src\main\java\com\healthcare\survey\dto\DashboardStatsDto.java

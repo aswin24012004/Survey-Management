@@ -30,6 +30,9 @@ public class AuthService {
     @Value("${app.jwt.cookie-name:refreshToken}")
     private String refreshCookieName;
 
+    @Value("${app.jwt.cookie-secure:false}")
+    private boolean cookieSecure;
+
     public AuthService(AuthenticationManager authenticationManager,
                        JwtTokenProvider tokenProvider,
                        AppUserRepository userRepository,
@@ -103,7 +106,7 @@ public class AuthService {
     private void setRefreshTokenCookie(HttpServletResponse response, String token, int maxAgeSeconds) {
         ResponseCookie cookie = ResponseCookie.from(refreshCookieName, token)
                 .httpOnly(true)
-                .secure(false) // Set to true in HTTPS production
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(maxAgeSeconds)
                 .sameSite("Lax")

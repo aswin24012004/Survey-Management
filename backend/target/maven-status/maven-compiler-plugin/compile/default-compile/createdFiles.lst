@@ -17,6 +17,7 @@ com\healthcare\survey\repository\SurveyQuestionRepository.class
 com\healthcare\survey\entity\SurveyTemplate.class
 com\healthcare\survey\entity\SurveyVersion.class
 com\healthcare\survey\dto\SubmissionAnswerDto.class
+com\healthcare\survey\controller\WebAppController.class
 com\healthcare\survey\dto\PublicSurveyDto.class
 com\healthcare\survey\config\OpenApiConfig.class
 com\healthcare\survey\dto\SurveyTemplateResponse.class

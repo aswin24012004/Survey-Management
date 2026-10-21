@@ -1,0 +1,46 @@
+# Review Render's resource charges before applying this Blueprint.
+services:
+  - type: web
+    name: healthcare-survey
+    runtime: docker
+    plan: 0.5c-512mb
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeployTrigger: off
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_INITIAL_PASSWORD
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: healthcare-survey-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: healthcare-survey-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: healthcare-survey-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: healthcare-survey-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: healthcare-survey-db
+          property: password
+databases:
+  - name: healthcare-survey-db
+    databaseName: healthcare_survey
+    user: survey
+    plan: 0.1c-256mb
+    diskSizeGB: 1
+    region: singapore
+    ipAllowList: []

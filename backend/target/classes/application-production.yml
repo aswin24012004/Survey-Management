@@ -1,0 +1,37 @@
+server:
+  forward-headers-strategy: framework
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    baseline-on-migrate: false
+app:
+  admin:
+    initial-password: ${ADMIN_INITIAL_PASSWORD}
+  jwt:
+    secret: ${JWT_SECRET}
+    cookie-secure: true
+  cors:
+    allowed-origins: ${PUBLIC_APP_URL:${RENDER_EXTERNAL_URL}}
+  public-survey:
+    base-url: ${PUBLIC_APP_URL:${RENDER_EXTERNAL_URL}}/survey
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
