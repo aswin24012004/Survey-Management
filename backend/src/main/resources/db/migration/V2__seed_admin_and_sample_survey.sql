@@ -81,3 +81,8 @@ VALUES
     '{"placeholder":"Write your feedback here..."}',
     CURRENT_TIMESTAMP
 );
+
+-- Synchronize PostgreSQL sequence values with seeded primary keys
+SELECT setval('app_user_id_seq', COALESCE((SELECT MAX(id) FROM app_user), 1), true);
+SELECT setval('survey_template_id_seq', COALESCE((SELECT MAX(id) FROM survey_template), 1), true);
+SELECT setval('survey_question_id_seq', COALESCE((SELECT MAX(id) FROM survey_question), 1), true);

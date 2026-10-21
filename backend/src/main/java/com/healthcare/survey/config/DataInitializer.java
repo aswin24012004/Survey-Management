@@ -36,7 +36,14 @@ public class DataInitializer {
     }
 
     private AppUser initAdminUser() {
-        return userRepository.findByUsername("admin").orElseGet(() -> {
+        return userRepository.findByUsername("admin").map(existing -> {
+            if (!passwordEncoder.matches("Admin@123456", existing.getPasswordHash())) {
+                log.info("Synchronizing administrator password hash for: admin");
+                existing.setPasswordHash(passwordEncoder.encode("Admin@123456"));
+                return userRepository.save(existing);
+            }
+            return existing;
+        }).orElseGet(() -> {
             log.info("Creating default administrator account: admin / admin@qms.healthcare");
             AppUser admin = new AppUser(
                     "admin",

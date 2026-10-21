@@ -1,0 +1,14 @@
+{
+  "name": "healthcare-survey",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --prefix frontend",
+    "test": "npm test --prefix frontend",
+    "start": "npm run dev --prefix frontend"
+  },
+  "dependencies": {
+    "@neon/config": "^1.9.3",
+    "@neon/env": "^1.6.4"
+  }
+}

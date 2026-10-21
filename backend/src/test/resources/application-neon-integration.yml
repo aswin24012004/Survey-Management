@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://ep-sparkling-violet-b4udu056-pooler.c-6.us-east-2.aws.neon.tech:5432/postgress?sslmode=require
+    username: postgress_owner
+    password: npg_1hNcGUM9Sgmw
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://ep-sparkling-violet-b4udu056.c-6.us-east-2.aws.neon.tech:5432/postgress?sslmode=require
+    user: postgress_owner
+    password: npg_1hNcGUM9Sgmw
+    baseline-on-migrate: true
+    locations: classpath:db/migration

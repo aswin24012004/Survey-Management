@@ -12,6 +12,7 @@ com\healthcare\survey\config\DataInitializer.class
 com\healthcare\survey\entity\SurveyResponse.class
 com\healthcare\survey\entity\ResponseStatus.class
 com\healthcare\survey\repository\AuditLogRepository.class
+com\healthcare\survey\config\NeonEnvironmentPostProcessor$ParsedDbUri.class
 com\healthcare\survey\repository\SurveyQuestionRepository.class
 com\healthcare\survey\entity\SurveyTemplate.class
 com\healthcare\survey\entity\SurveyVersion.class
@@ -36,6 +37,7 @@ com\healthcare\survey\dto\QuestionStatDto.class
 com\healthcare\survey\dto\AuthResponse.class
 com\healthcare\survey\dto\SurveyTemplateRequest.class
 com\healthcare\survey\security\SecurityConfig.class
+com\healthcare\survey\config\NeonEnvironmentPostProcessor.class
 com\healthcare\survey\dto\SurveySummaryResponse.class
 com\healthcare\survey\security\JwtTokenProvider.class
 com\healthcare\survey\dto\QuestionDefinitionDto.class
